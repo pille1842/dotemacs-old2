@@ -120,16 +120,15 @@ The face customizations need to be reapplied every time an Org file is loaded or
 ** Theme
 I would like to have two color themes available: A light one for editing in the bright sunshine of the day, and a dark one for hacking in the middle of a sleepless night.
 
-To do this, first we need to decide which themes to use. For the light one, I quite like the [[https://github.com/nashamri/spacemacs-theme][Spacemacs theme]], and other people tend to agree (150,887 downloads on GitHub as of this moment). The even more popular [[https://github.com/bbatsov/zenburn-emacs][Zenburn theme]] is a dark theme that integrates nicely with the Mate desktop I'm using. Let's install both themes. Unfortunately, the Spacemacs theme is very hard to use with use-package because it doesn't have a =(provide)= statement, so we'll just install this one manually.
+To do this, first we need to decide which themes to use. [[https://github.com/nashamri/spacemacs-theme][Spacemacs theme]] provides both a dark and light theme and is quite nice to look at---other people tend to agree (150,887 downloads on GitHub as of this moment). Unfortunately, the Spacemacs theme is very hard to use with use-package because it doesn't have a =(provide)= statement, so we'll just install this one manually.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package zenburn-theme)
   (unless (package-installed-p 'spacemacs-theme)
     (package-install 'spacemacs-theme))
 #+END_SRC
 
 *** Headline size in Orgmode files
-By default, the Spacemacs theme changes the height of headlines in Orgmode files. Unfortunately, the Zenburn theme does no such thing. To get a uniform look across themes, disable this feature in the Spacemacs theme.
+By default, the Spacemacs theme changes the height of headlines in Orgmode files. I'm not really fond of that, so let's disable the feature.
 
 #+BEGIN_SRC emacs-lisp
   (setq spacemacs-theme-org-height nil)
