@@ -1,0 +1,315 @@
+#+TITLE:  My Emacs Configuration
+#+AUTHOR: Eric Haberstroh
+#+EMAIL:  gpg@erixpage.de
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org.css" />
+
+* Configuration
+This is my personal Emacs configuration file. Most of the configuration takes place in this file, but some initial settings are done in =init.el=, which is also responsible for loading this Orgmode file.
+
+** License
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see [[https://www.gnu.org/licenses/][<https://www.gnu.org/licenses/>]].
+
+** Using this configuration
+I would not recommend using this configuration in its entirety. There are many settings that might not suit your personal preference, and even settings which might be harmful in your environment.
+
+Nevertheless, to use this configuration, first make a backup of your existing configuration files:
+
+#+BEGIN_SRC shell-script
+  mv .emacs{,.BAK}
+  mv .emacs.d{,.BAK}
+#+END_SRC
+
+Then clone the repository into the right location:
+
+#+BEGIN_SRC shell-script
+  git clone https://github.com/pille1842/dotemacs ~/.emacs.d
+#+END_SRC
+
+Then (re)start Emacs.
+
+* Package management
+This configuration relies on John Wiegley's excellent [[https://github.com/jwiegley/use-package][use-package]] macro. Use-package is already setup by =init.el=, however there are some additional settings I would like to make.
+
+First of all, use-package should ensure that all the packages referenced in this configuration are actually installed. This could be done in two ways: First, by adding =:ensure t= to every instance of the =use-package= macro; second, by globally setting =use-package-always-ensure= to a non-nil value. The latter seems cleaner to me.
+
+#+BEGIN_SRC emacs-lisp
+  (setq use-package-always-ensure t)
+#+END_SRC
+
+[[https://github.com/myrjola/diminish.el][Diminish.el]] provides a cleaner modeline (the second line to the bottom of the screen) by hiding or abbreviating enabled minor modes. There is excellent integration with use-package: The =:diminish= keyword in any use-package macro will take the appropriate actions. But first of all, we need to pull in the package, to be able to actually use it.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish)
+  (require 'diminish)
+#+END_SRC
+
+* Interface
+There are numerous packages, themes, and settings that will make Emacs (a) much easier to use and (b) more aesthetically pleasing.
+
+** Font and cursor
+On my system, Emacs uses the Ubuntu font family by default. Although this is a nice and readable font, I would like to use a different font called [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]], made by Adobe.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'default-frame-alist '(font . "Source Code Pro"))
+#+END_SRC
+
+The default cursor is an ugly black block. Use a vertical bar instead.
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default cursor-type 'bar)
+#+END_SRC
+
+In Orgmode, I like to have a sans-serif font for text, which is easy to set up with variable-pitch-mode. But in code blocks and tables, a fixed-pitch font is better. Also, set a different sans-serif font to be used by variable-pitch-mode.
+
+The face customizations need to be reapplied every time an Org file is loaded or a new theme is activated, so we define a function =eh/apply-special-org-faces= that does the styling and attach it to the =org-mode-hook=. Unfortunately, there is no built-in hook run after =load-theme=, so we'll define such a hook and give =load-theme= some advice to actually run it.
+
+#+BEGIN_SRC emacs-lisp
+    (set-face-attribute 'variable-pitch nil
+			:family "FreeSans"
+			:height 135)
+
+    (defvar after-load-theme-hook nil
+      "Hook run after a custom theme is loaded using `load-theme'.")
+
+    (defadvice load-theme (after run-after-load-theme-hook activate)
+      "Run `after-load-theme-hook'."
+      (run-hooks 'after-load-theme-hook))
+
+    (defun eh/apply-special-org-faces ()
+      "Apply a number of face settings to Orgmode faces.
+
+  Specifically, enable variable-pitch-mode to make all buffer contents
+  appear in a sans-serif font. Exclude blocks, tables, verbatim text
+  and some other elements from appearing in sans-serif.
+
+  Also refontify all open Org buffers. When the custom theme is
+  switched, this recalculates some necessary color settings.
+
+  You may attach this function to `org-mode-hook' and
+  `after-load-theme-hook' to apply these settings whenever an Org
+  file is loaded or the custom theme changes."
+      (interactive)
+      (variable-pitch-mode 1)
+      (dolist (face '(org-block
+		      org-block-begin-line
+		      org-block-end-line
+		      org-document-info-keyword
+		      org-meta-line
+		      org-table
+		      org-verbatim))
+	(set-face-attribute face nil
+			    :inherit 'fixed-pitch
+			    :height 110))
+      ;; Re-fontify all open Org buffers.
+      (save-current-buffer
+	(mapc (lambda (b)
+		(set-buffer b)
+		(when (equal major-mode 'org-mode)
+		  (font-lock-fontify-buffer)))
+	      (buffer-list))))
+
+    (add-hook 'org-mode-hook 'eh/apply-special-org-faces)
+    (add-hook 'after-load-theme-hook 'eh/apply-special-org-faces)
+#+END_SRC
+
+** Theme
+I would like to have two color themes available: A light one for editing in the bright sunshine of the day, and a dark one for hacking in the middle of a sleepless night.
+
+To do this, first we need to decide which themes to use. For the light one, I quite like the [[https://github.com/nashamri/spacemacs-theme][Spacemacs theme]], and other people tend to agree (150,887 downloads on GitHub as of this moment). The even more popular [[https://github.com/bbatsov/zenburn-emacs][Zenburn theme]] is a dark theme that integrates nicely with the Mate desktop I'm using. Let's install both themes. Unfortunately, the Spacemacs theme is very hard to use with use-package because it doesn't have a =(provide)= statement, so we'll just install this one manually.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package zenburn-theme)
+  (unless (package-installed-p 'spacemacs-theme)
+    (package-install 'spacemacs-theme))
+#+END_SRC
+
+*** Headline size in Orgmode files
+By default, the Spacemacs theme changes the height of headlines in Orgmode files. Unfortunately, the Zenburn theme does no such thing. To get a uniform look across themes, disable this feature in the Spacemacs theme.
+
+#+BEGIN_SRC emacs-lisp
+  (setq spacemacs-theme-org-height nil)
+#+END_SRC
+
+*** Load initial theme based on time of day
+The first theme to be loaded should be dependent on the time of day: Between 6am and 9pm, load the light Spacemacs theme; in the night, load the dark theme. We'll define a function to load the right theme based on the time of day.
+
+What Emacs assumes to be daytime and nighttime is determined by the variables =eh/beginning-of-day= and =eh/end-of-day=. These should be integers containing the hour in 24-hour format.
+
+#+BEGIN_SRC emacs-lisp
+  (defvar eh/day-time-theme 'spacemacs-light
+    "The default custom theme for daylight hours.")
+
+  (defvar eh/night-time-theme 'spacemacs-dark
+    "The default custom theme for night hours.")
+
+  (defvar eh/beginning-of-day 6
+    "Hour when the daylight is assumed to begin. Default 6.")
+
+  (defvar eh/end-of-day 21
+    "Hour when the daylight is assumed to end. Default 21 (9pm).")
+
+  (defun eh/load-theme-for-time-of-day ()
+    "Load a custom theme based on the current time of day.
+
+  Load the theme `eh/day-time-theme' between `eh/beginning-of-day'
+  and `eh/end-of-day'. Otherwise, load the `eh/night-time-theme'."
+    (interactive)
+    (let (($hour-of-day (string-to-number (format-time-string "%H"))))
+      (mapcar #'disable-theme custom-enabled-themes)
+      (if (and (>= $hour-of-day eh/beginning-of-day) (< $hour-of-day eh/end-of-day))
+	  (funcall 'load-theme (car `(,eh/day-time-theme)) t)
+	(funcall 'load-theme (car `(,eh/night-time-theme)) t))))
+  (eh/load-theme-for-time-of-day)
+#+END_SRC
+
+*** Cycle through available themes
+Next, we will define a variable to hold the list of available themes. We then go ahead and define a function to cycle through these themes. This function can either be called directly via =M-x eh/cycle-theme=, or via the keybinding =C-x t=. The function definition for cycling through an array has been taken from [[http://ergoemacs.org/emacs/elisp_toggle_command.html][ergoemacs.org]].
+
+#+BEGIN_SRC emacs-lisp
+  (defvar eh/cycle-themes-list
+    `[,eh/day-time-theme ,eh/night-time-theme]
+    "An array of themes that can be cycled through with `eh/cycle-theme'.")
+
+  (defun eh/cycle-theme (@n)
+    "Cycle through a list of color themes.
+
+  If `universal-argument' is called first, cycle N steps. Default is 1 step."
+    (interactive "p")
+    (let* (($values eh/cycle-themes-list)
+	   ($index-before
+	    (if (get 'eh/cycle-theme 'state)
+		(get 'eh/cycle-theme 'state)
+	      0))
+	   ($index-after (% (+ $index-before (length $values) @n) (length $values)))
+	   ($next-value (aref $values $index-after)))
+      (put 'eh/cycle-theme 'state $index-after)
+      ;; First, disable all enabled custom themes.
+      (mapcar #'disable-theme custom-enabled-themes)
+      ;; Now activate the new theme.
+      (load-theme $next-value t)
+      (message "Theme changed to %s" $next-value)))
+  (global-set-key (kbd "C-x t") 'eh/cycle-theme)
+#+END_SRC
+
+** Frame title
+The default frame title format is =emacs@hostname=. I would rather have it just say "Emacs".
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default frame-title-format "Emacs")
+#+END_SRC
+
+** Diminish some minor modes
+These minor modes are not part of any package, but I nevertheless want to hide them from the modeline.
+
+#+BEGIN_SRC emacs-lisp
+  (diminish 'buffer-face-mode)
+#+END_SRC
+
+** Line numbers
+I want to have line numbers in every buffer containing source code. [[https://github.com/CodeFalling/nlinum-relative][Nlinum-relative]] is a package derived from nlinum (a more effective implementation of line numbers in Emacs) that displays the absolute line number in the current line, but line numbers relative to that everywhere else.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package nlinum-relative
+    :config
+    (add-hook 'prog-mode-hook 'nlinum-relative-mode))
+#+END_SRC
+
+** Column numbers
+Always show the current column in the modeline.
+
+#+BEGIN_SRC emacs-lisp
+  (column-number-mode 1)
+#+END_SRC
+
+** Never ask yes or no questions
+When asking for confirmation, never force me to type "yes". A simple "y" should suffice.
+
+#+BEGIN_SRC emacs-lisp
+  (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+* Editing
+The settings in this section improve the general experience when editing files.
+
+** Electric pair
+When entering any pair of parentheses, quotation marks etc., Emacs should automatically provide the matching closing bracket.
+
+#+BEGIN_SRC emacs-lisp
+  (electric-pair-mode 1)
+#+END_SRC
+
+* Orgmode
+[[https://orgmode.org/][Orgmode]] is a beast of an extension to Emacs. It's a tool to make outlines, keep notes, maintain TODO lists, plan projects, and author documents. There is a near endless list of features and I cannot presume to know more than a tiny fraction of its abilities. The settings in this section customize Orgmode for my personal use.
+
+** Editing
+In Orgmode, I would like to enable visual-line-mode instead of filling paragraphs.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook (lambda () (visual-line-mode 1)))
+#+END_SRC
+
+** Optical adjustments
+[[https://github.com/sabof/org-bullets][Org-bullets]] hides the asterisks that normally precede headlines and shows beautiful bullet points instead.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+END_SRC
+
+** Export
+Orgmode files can be exported into a variety of formats, the most common being HTML and PDF (via LaTeX).
+
+*** HTML
+To export an Orgmode file to HTML, the htmlize package is required.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize)
+#+END_SRC
+
+* Version control
+Why talk to Git on the commandline when you can have [[https://magit.vc/][Magit]]? Magit is an excellent "porcelain" for Git inside Emacs. We'll install it and set up the [[https://magit.vc/manual/magit/Getting-Started.html#Getting-Started][recommended keybindings]].
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :bind (("C-x g" . 'magit-status)
+	   ("C-x M-g" . 'magit-dispatch-popup)))
+#+END_SRC
+
+* Tools
+The functions in this section are various enhancements of Emacs functionality.
+
+** Unfill paragraph or region
+With =M-q=, one can fill a paragraph, which means to break it into separate lines at a defined =fill-column=. Unfilling a paragraph means joining it together in one long line. The following function achieves that. It is borrowed from the [[https://www.emacswiki.org/emacs/UnfillParagraph][EmacsWiki]].
+
+#+BEGIN_SRC emacs-lisp
+  (defun unfill-paragraph (&optional region)
+    "Takes a multi-line paragraph and makes it into a single line of text.
+
+  If the region is active, the unfilling is applied to it instead."
+    (interactive (progn (barf-if-buffer-read-only) '(t)))
+    (let ((fill-column (point-max))
+	  (emacs-lisp-docstring-fill-column t))
+      (fill-paragraph nil region)))
+#+END_SRC
+
+** Revert all open buffers
+This function from [[http://irreal.org/blog/?p=857][irreal.org]] reverts all unmodified buffers to their state on disk.
+
+#+BEGIN_SRC emacs-lisp
+  (defun revert-all-buffers ()
+    "Revert all non-modified buffers associated with a file."
+    (interactive)
+    (save-current-buffer
+      (mapc (lambda (b)
+	      (set-buffer b)
+	      (unless (or (null (buffer-file-name)) (buffer-modified-p))
+		(revert-buffer t t)
+		(message "Reverted %s" (buffer-file-name))))
+	    (buffer-list))))
+#+END_SRC
+
