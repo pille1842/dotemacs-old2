@@ -246,6 +246,16 @@ When entering any pair of parentheses, quotation marks etc., Emacs should automa
 * Orgmode
 [[https://orgmode.org/][Orgmode]] is a beast of an extension to Emacs. It's a tool to make outlines, keep notes, maintain TODO lists, plan projects, and author documents. There is a near endless list of features and I cannot presume to know more than a tiny fraction of its abilities. The settings in this section customize Orgmode for my personal use.
 
+** Keybindings
+Since Orgmode is already installed, all we have to do is set up the [[https://orgmode.org/manual/Activation.html#Activation][recommended keybindings]].
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c b") 'org-switchb)
+#+END_SRC
+
 ** Editing
 In Orgmode, I would like to enable visual-line-mode instead of filling paragraphs.
 
