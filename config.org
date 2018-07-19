@@ -99,6 +99,7 @@ The face customizations need to be reapplied every time an Org file is loaded or
 		      org-block-end-line
 		      org-document-info-keyword
 		      org-meta-line
+		      org-special-keyword
 		      org-table
 		      org-verbatim))
 	(set-face-attribute face nil
