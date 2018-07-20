@@ -345,6 +345,30 @@ Why talk to Git on the commandline when you can have [[https://magit.vc/][Magit]
            ("C-x M-g" . 'magit-dispatch-popup)))
 #+END_SRC
 
+* Backups
+By default, Emacs litters backup files with the suffix =~= all over the place. It would be a much better solution to keep all backup files in one central place. (I follow the recommendations from [[https://stackoverflow.com/a/151946][StackOverflow]] in these settings.)
+
+First, let's make Emacs backup files in a central directory in =~/.emacs.d/=.
+
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist `(("." . "~/.emacs.d/backup")))
+#+END_SRC
+
+There are two ways in which Emacs can make a backup. It can either rename the original file (i.e. move it to a new place), or it can copy the original file to the backup location. The second solution is safer, because a file might have multiple names (hardlinks) and moving it might have an unwanted outcome. It is also the slower method, but this will hardly matter on a modern system with an SSD. You can read about backup methods in the [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Backup-Copying.html#Backup-Copying][Emacs manual]].
+
+#+BEGIN_SRC emacs-lisp
+  (setq backup-by-copying t)
+#+END_SRC
+
+Since we now have a central location for backups and they don't clutter our directories, we can probably afford to make more backups of each file. So we instruct Emacs to keep two of the newest and six of the oldest versions of each file; to silently delete backup files if we no longer need them; and to enable versioned backup files.
+
+#+BEGIN_SRC emacs-lisp
+  (setq delete-old-versions t
+        kept-new-versions 2
+        kept-old-versions 6
+        version-control t)
+#+END_SRC
+
 * Other major modes
 These settings apply to various other major (and minor) modes for different file types.
 
