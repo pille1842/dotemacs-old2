@@ -232,6 +232,13 @@ When asking for confirmation, never force me to type "yes". A simple "y" should 
   (fset 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
+** Turn off the bell
+Acoustic feedback is annoying, so let's disable it and give visual feedback instead.
+
+#+BEGIN_SRC emacs-lisp
+  (setq visible-bell t)
+#+END_SRC
+
 * Editing
 The settings in this section improve the general experience when editing files.
 
