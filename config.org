@@ -51,18 +51,22 @@ First of all, use-package should ensure that all the packages referenced in this
 There are numerous packages, themes, and settings that will make Emacs (a) much easier to use and (b) more aesthetically pleasing.
 
 ** Font and cursor
+
+*** Use Source Code Pro as primary font
 On my system, Emacs uses the Ubuntu font family by default. Although this is a nice and readable font, I would like to use a different font called [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]], made by Adobe.
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Source Code Pro"))
 #+END_SRC
 
+*** Use a vertical bar as cursor
 The default cursor is an ugly black block. Use a vertical bar instead.
 
 #+BEGIN_SRC emacs-lisp
   (setq-default cursor-type 'bar)
 #+END_SRC
 
+*** Sans-serif font in Org buffers
 In Orgmode, I like to have a sans-serif font for text, which is easy to set up with variable-pitch-mode. But in code blocks and tables, a fixed-pitch font is better. Also, set a different sans-serif font to be used by variable-pitch-mode.
 
 The face customizations need to be reapplied every time an Org file is loaded or a new theme is activated, so we define a function =eh/apply-special-org-faces= that does the styling and attach it to the =org-mode-hook=. Unfortunately, there is no built-in hook run after =load-theme=, so we'll define such a hook and give =load-theme= some advice to actually run it.
