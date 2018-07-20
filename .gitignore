@@ -54,3 +54,6 @@ flycheck_*.el
 # Exported and tangled files
 /config.el
 /*.html
+
+# The custom-file
+/custom.el
