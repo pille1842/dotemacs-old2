@@ -245,6 +245,25 @@ Acoustic feedback is annoying, so let's disable it and give visual feedback inst
 * Editing
 The settings in this section improve the general experience when editing files.
 
+** Indentation
+In general, don't use tabs and indent with four spaces. This snippet is taken from [[https://stackoverflow.com/a/10439239][StackOverflow]]. First we define a function to generate a sequence of tab stops like [4, 8, 12, ...]. Then we disable =indent-tabs-mode= so that Emacs never indents with tabs. Finally we set the desired tab width to 4 and activate our custom tab-stop-list.
+
+#+BEGIN_SRC emacs-lisp
+  (defun eh/generate-tab-stops (&optional width max)
+	"Return a sequence suitable for `tab-stop-list'.
+
+  If not given a WIDTH, will use the value of `tab-width'. If not given
+  a MAX column, will make a sequence for 200 columns."
+	(let* ((max-column (or max 200))
+	   (tab-width (or width tab-width))
+	   (count (/ max-column tab-width)))
+	  (number-sequence tab-width (* tab-width count) tab-width)))
+
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+  (setq tab-stop-list (eh/generate-tab-stops))
+#+END_SRC
+
 ** Electric pair
 When entering any pair of parentheses, quotation marks etc., Emacs should automatically provide the matching closing bracket.
 
