@@ -72,19 +72,19 @@ In Orgmode, I like to have a sans-serif font for text, which is easy to set up w
 The face customizations need to be reapplied every time an Org file is loaded or a new theme is activated, so we define a function =eh/apply-special-org-faces= that does the styling and attach it to the =org-mode-hook=. Unfortunately, there is no built-in hook run after =load-theme=, so we'll define such a hook and give =load-theme= some advice to actually run it.
 
 #+BEGIN_SRC emacs-lisp
-    (set-face-attribute 'variable-pitch nil
-			:family "FreeSans"
-			:height 135)
+  (set-face-attribute 'variable-pitch nil
+                      :family "FreeSans"
+                      :height 135)
 
-    (defvar after-load-theme-hook nil
-      "Hook run after a custom theme is loaded using `load-theme'.")
+  (defvar after-load-theme-hook nil
+    "Hook run after a custom theme is loaded using `load-theme'.")
 
-    (defadvice load-theme (after run-after-load-theme-hook activate)
-      "Run `after-load-theme-hook'."
-      (run-hooks 'after-load-theme-hook))
+  (defadvice load-theme (after run-after-load-theme-hook activate)
+    "Run `after-load-theme-hook'."
+    (run-hooks 'after-load-theme-hook))
 
-    (defun eh/apply-special-org-faces ()
-      "Apply a number of face settings to Orgmode faces.
+  (defun eh/apply-special-org-faces ()
+    "Apply a number of face settings to Orgmode faces.
 
   Specifically, enable variable-pitch-mode to make all buffer contents
   appear in a sans-serif font. Exclude blocks, tables, verbatim text
@@ -96,29 +96,29 @@ The face customizations need to be reapplied every time an Org file is loaded or
   You may attach this function to `org-mode-hook' and
   `after-load-theme-hook' to apply these settings whenever an Org
   file is loaded or the custom theme changes."
-      (interactive)
-      (variable-pitch-mode 1)
-      (dolist (face '(org-block
-		      org-block-begin-line
-		      org-block-end-line
-		      org-document-info-keyword
-		      org-meta-line
-		      org-special-keyword
-		      org-table
-		      org-verbatim))
-	(set-face-attribute face nil
-			    :inherit 'fixed-pitch
-			    :height 110))
-      ;; Re-fontify all open Org buffers.
-      (save-current-buffer
-	(mapc (lambda (b)
-		(set-buffer b)
-		(when (equal major-mode 'org-mode)
-		  (font-lock-fontify-buffer)))
-	      (buffer-list))))
+    (interactive)
+    (variable-pitch-mode 1)
+    (dolist (face '(org-block
+                    org-block-begin-line
+                    org-block-end-line
+                    org-document-info-keyword
+                    org-meta-line
+                    org-special-keyword
+                    org-table
+                    org-verbatim))
+      (set-face-attribute face nil
+                          :inherit 'fixed-pitch
+                          :height 110))
+    ;; Re-fontify all open Org buffers.
+    (save-current-buffer
+      (mapc (lambda (b)
+              (set-buffer b)
+              (when (equal major-mode 'org-mode)
+                (font-lock-fontify-buffer)))
+            (buffer-list))))
 
-    (add-hook 'org-mode-hook 'eh/apply-special-org-faces)
-    (add-hook 'after-load-theme-hook 'eh/apply-special-org-faces)
+  (add-hook 'org-mode-hook 'eh/apply-special-org-faces)
+  (add-hook 'after-load-theme-hook 'eh/apply-special-org-faces)
 #+END_SRC
 
 ** Theme
@@ -165,8 +165,9 @@ What Emacs assumes to be daytime and nighttime is determined by the variables =e
     (let (($hour-of-day (string-to-number (format-time-string "%H"))))
       (mapcar #'disable-theme custom-enabled-themes)
       (if (and (>= $hour-of-day eh/beginning-of-day) (< $hour-of-day eh/end-of-day))
-	  (funcall 'load-theme (car `(,eh/day-time-theme)) t)
-	(funcall 'load-theme (car `(,eh/night-time-theme)) t))))
+          (funcall 'load-theme (car `(,eh/day-time-theme)) t)
+        (funcall 'load-theme (car `(,eh/night-time-theme)) t))))
+
   (eh/load-theme-for-time-of-day)
 #+END_SRC
 
@@ -184,12 +185,12 @@ Next, we will define a variable to hold the list of available themes. We then go
   If `universal-argument' is called first, cycle N steps. Default is 1 step."
     (interactive "p")
     (let* (($values eh/cycle-themes-list)
-	   ($index-before
-	    (if (get 'eh/cycle-theme 'state)
-		(get 'eh/cycle-theme 'state)
-	      0))
-	   ($index-after (% (+ $index-before (length $values) @n) (length $values)))
-	   ($next-value (aref $values $index-after)))
+           ($index-before
+            (if (get 'eh/cycle-theme 'state)
+                (get 'eh/cycle-theme 'state)
+              0))
+           ($index-after (% (+ $index-before (length $values) @n) (length $values)))
+           ($next-value (aref $values $index-after)))
       (put 'eh/cycle-theme 'state $index-after)
       ;; First, disable all enabled custom themes.
       (mapcar #'disable-theme custom-enabled-themes)
@@ -211,8 +212,8 @@ These minor modes are not part of any package, but I nevertheless want to hide t
 
 #+BEGIN_SRC emacs-lisp
   (dolist (mode '(auto-revert-mode
-		  buffer-face-mode
-		  visual-line-mode))
+                  buffer-face-mode
+                  visual-line-mode))
     (diminish mode))
 #+END_SRC
 
@@ -254,14 +255,14 @@ In general, don't use tabs and indent with four spaces. This snippet is taken fr
 
 #+BEGIN_SRC emacs-lisp
   (defun eh/generate-tab-stops (&optional width max)
-	"Return a sequence suitable for `tab-stop-list'.
+    "Return a sequence suitable for `tab-stop-list'.
 
   If not given a WIDTH, will use the value of `tab-width'. If not given
   a MAX column, will make a sequence for 200 columns."
-	(let* ((max-column (or max 200))
-	   (tab-width (or width tab-width))
-	   (count (/ max-column tab-width)))
-	  (number-sequence tab-width (* tab-width count) tab-width)))
+    (let* ((max-column (or max 200))
+           (tab-width (or width tab-width))
+           (count (/ max-column tab-width)))
+      (number-sequence tab-width (* tab-width count) tab-width)))
 
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 4)
@@ -334,7 +335,7 @@ Why talk to Git on the commandline when you can have [[https://magit.vc/][Magit]
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :bind (("C-x g" . 'magit-status)
-	   ("C-x M-g" . 'magit-dispatch-popup)))
+           ("C-x M-g" . 'magit-dispatch-popup)))
 #+END_SRC
 
 * Other major modes
@@ -360,7 +361,7 @@ With =M-q=, one can fill a paragraph, which means to break it into separate line
   If the region is active, the unfilling is applied to it instead."
     (interactive (progn (barf-if-buffer-read-only) '(t)))
     (let ((fill-column (point-max))
-	  (emacs-lisp-docstring-fill-column t))
+          (emacs-lisp-docstring-fill-column t))
       (fill-paragraph nil region)))
 #+END_SRC
 
@@ -373,10 +374,10 @@ This function from [[http://irreal.org/blog/?p=857][irreal.org]] reverts all unm
     (interactive)
     (save-current-buffer
       (mapc (lambda (b)
-	      (set-buffer b)
-	      (unless (or (null (buffer-file-name)) (buffer-modified-p))
-		(revert-buffer t t)
-		(message "Reverted %s" (buffer-file-name))))
-	    (buffer-list))))
+              (set-buffer b)
+              (unless (or (null (buffer-file-name)) (buffer-modified-p))
+                (revert-buffer t t)
+                (message "Reverted %s" (buffer-file-name))))
+            (buffer-list))))
 #+END_SRC
 
