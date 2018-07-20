@@ -206,7 +206,10 @@ The default frame title format is =emacs@hostname=. I would rather have it just 
 These minor modes are not part of any package, but I nevertheless want to hide them from the modeline.
 
 #+BEGIN_SRC emacs-lisp
-  (diminish 'buffer-face-mode)
+  (dolist (mode '(auto-revert-mode
+		  buffer-face-mode
+		  visual-line-mode))
+    (diminish mode))
 #+END_SRC
 
 ** Line numbers
