@@ -337,6 +337,16 @@ Why talk to Git on the commandline when you can have [[https://magit.vc/][Magit]
 	   ("C-x M-g" . 'magit-dispatch-popup)))
 #+END_SRC
 
+* Other major modes
+These settings apply to various other major (and minor) modes for different file types.
+
+** Systemd unit files
+Install a mode to edit systemd unit files.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package systemd)
+#+END_SRC
+
 * Tools
 The functions in this section are various enhancements of Emacs functionality.
 
