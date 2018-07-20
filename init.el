@@ -40,9 +40,8 @@
 
 ;; Turn off the mouse interface early in startup to avoid its
 ;; momentary display.
-(when window-system
-  (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode))
-    (funcall mode -1)))
+(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode))
+  (funcall mode -1))
 
 ;; Don't display the splash screen or any text in the initial scratch
 ;; buffer.
