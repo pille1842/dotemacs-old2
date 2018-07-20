@@ -47,6 +47,13 @@ First of all, use-package should ensure that all the packages referenced in this
   (require 'diminish)
 #+END_SRC
 
+* Customize
+Emacs' Customize interface is an abomination. I do not want to use it, and I do absolutely not want its generated code to make its way into my tidy init file. So let's put the output of Custom into its own file... and then ignore that file forever.
+
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file (concat user-emacs-directory "custom.el"))
+#+END_SRC
+
 * Interface
 There are numerous packages, themes, and settings that will make Emacs (a) much easier to use and (b) more aesthetically pleasing.
 
