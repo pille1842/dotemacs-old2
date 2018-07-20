@@ -379,6 +379,13 @@ Install a mode to edit systemd unit files.
   (use-package systemd)
 #+END_SRC
 
+** Gitignore files
+Install a mode to edit =.gitignore= files.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package gitignore-mode)
+#+END_SRC
+
 * Tools
 The functions in this section are various enhancements of Emacs functionality.
 
