@@ -386,6 +386,13 @@ Install a mode to edit =.gitignore= files.
   (use-package gitignore-mode)
 #+END_SRC
 
+** Lua
+Let's install a major mode to code in Lua.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lua-mode)
+#+END_SRC
+
 * Tools
 The functions in this section are various enhancements of Emacs functionality.
 
