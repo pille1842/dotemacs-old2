@@ -410,6 +410,14 @@ Install a mode to edit =.gitignore= files.
   (use-package gitignore-mode)
 #+END_SRC
 
+** Markdown files
+[[https://daringfireball.net/projects/markdown/][Markdown]] is a markup language designed to be readable in plain text while producing clean HTML output. [[https://jblevins.org/projects/markdown-mode/][Markdown-mode]] provides support for Markdown in Emacs.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :mode "\\.md\\'")
+#+END_SRC
+
 ** Lua
 Let's install a major mode to code in Lua.
 
