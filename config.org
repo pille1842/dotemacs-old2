@@ -373,7 +373,9 @@ Since we now have a central location for backups and they don't clutter our dire
 These settings apply to various other major (and minor) modes for different file types.
 
 ** Systemd unit files
-Install a mode to edit systemd unit files.
+[[https://wiki.freedesktop.org/www/Software/systemd/][Systemd]] is a modern init system for Unix-like operating systems. It has replaced the older System V and RC init systems on many Linux distributions, including Ubuntu MATE, which is my primary operating system. While I rarely need to edit systemd unit files directly, there are some services and timers I manage on my computers, and I would like to be able to edit them.
+
+So let's use [[https://github.com/holomorph/systemd-mode][systemd-mode]] to enable syntax highlighting in those files.
 
 #+BEGIN_SRC emacs-lisp
   (use-package systemd)
