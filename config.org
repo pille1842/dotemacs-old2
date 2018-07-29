@@ -419,10 +419,11 @@ Install a mode to edit =.gitignore= files.
 #+END_SRC
 
 ** Lua
-Let's install a major mode to code in Lua.
+[[https://www.lua.org/][Lua]] is a powerful, embeddable scripting language. [[https://github.com/immerrr/lua-mode][Lua-mode]] provides support for Lua in Emacs.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package lua-mode)
+  (use-package lua-mode
+    :interpreter "lua")
 #+END_SRC
 
 * Tools
