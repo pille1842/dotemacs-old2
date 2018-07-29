@@ -381,6 +381,28 @@ So let's use [[https://github.com/holomorph/systemd-mode][systemd-mode]] to enab
   (use-package systemd)
 #+END_SRC
 
+** PHP, HTML, JavaScript
+Let's use [[https://github.com/emacs-php/php-mode][php-mode]] as our primary major mode to edit PHP files. The README also proposes enabling [[https://www.gnu.org/software/emacs/manual/html_node/autotype/index.html#Top][templates]] that spare us tedious retyping of various skeleton constructs.
+
+Oftentimes, PHP code, HTML, CSS, and JavaScript might be mixed in template files. The excellent [[http://web-mode.org/][web-mode]] is made to work with such files. We will configure it as the default major mode for HTML files and those with an extension of =.blade.php= ([[https://laravel.com/docs/master/blade][Laravel Blade templates]]).
+
+Finally, for pure JavaScript files, [[https://github.com/mooz/js2-mode][js2-mode]] offers the best support, so let's use that.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package php-mode
+    :config
+    (require 'php-ext))
+
+  (use-package web-mode
+    :mode (("\\.html\\'" . web-mode)
+           ("\\.htm\\'" . web-mode)
+           ("\\.tpl\\'" . web-mode)
+           ("\\.tpl\\.php\\'" . web-mode)
+           ("\\.blade\\.php\\'" . web-mode)))
+
+  (use-package js2-mode)
+#+END_SRC
+
 ** Gitignore files
 Install a mode to edit =.gitignore= files.
 
