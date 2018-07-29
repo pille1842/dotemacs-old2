@@ -423,7 +423,7 @@ Install a mode to edit =.gitignore= files.
 
 #+BEGIN_SRC emacs-lisp
   (use-package lua-mode
-    :interpreter "lua")
+    :interpreter "lua5.3")
 #+END_SRC
 
 * Tools
