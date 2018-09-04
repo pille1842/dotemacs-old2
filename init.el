@@ -39,8 +39,8 @@
 (setq gc-cons-threshold 400000000)
 
 ;; Turn off the mouse interface early in startup to avoid its
-;; momentary display.
-(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode tooltip-mode))
+;; momentary display. Keep the menu bar.
+(dolist (mode '(tool-bar-mode scroll-bar-mode tooltip-mode))
   (funcall mode -1))
 
 ;; Don't display the splash screen or any text in the initial scratch
