@@ -46,7 +46,8 @@
 ;; Don't display the splash screen or any text in the initial scratch
 ;; buffer.
 (setq inhibit-startup-message t)
-(setq initial-scratch-message "")
+(setq initial-scratch-message
+      ";; Welcome to Emacs.\n\n")
 
 ;; Set up package.el.
 (require 'package)
