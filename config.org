@@ -59,11 +59,11 @@ There are numerous packages, themes, and settings that will make Emacs (a) much 
 
 ** Font and cursor
 
-*** Use Source Code Pro as primary font
-On my system, Emacs uses the Ubuntu font family by default. Although this is a nice and readable font, I would like to use a different font called [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]], made by Adobe.
+*** Use Liberation Mono as primary font
+On my system, Emacs uses the Ubuntu font family by default. Although this is a nice and readable font, I would like to use a different free font called Liberation Mono.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist '(font . "Source Code Pro"))
+  (add-to-list 'default-frame-alist '(font . "Liberation Mono"))
 #+END_SRC
 
 *** Use a vertical bar as cursor
