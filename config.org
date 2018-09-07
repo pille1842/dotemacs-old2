@@ -2,6 +2,7 @@
 #+AUTHOR: Eric Haberstroh
 #+EMAIL:  gpg@erixpage.de
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org.css" />
+#+STARTUP: indent
 
 * Configuration
 This is my personal Emacs configuration file. Most of the configuration takes place in this file, but some initial settings are done in =init.el=, which is also responsible for loading this Orgmode file.
