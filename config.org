@@ -376,6 +376,32 @@ The following templates allow me to capture entries to my diary, TODOs and appoi
            "* %U %?\n  %i\n  %a")))
 #+END_SRC
 
+* RSS reader
+Using [[https://github.com/skeeto/elfeed][Elfeed]], Emacs can be an excellent RSS news reader. [[https://github.com/remyhonig/elfeed-org][Elfeed-org]] enhances Elfeed by making it configurable in an Orgmode file.
+
+Elfeed recommends setting up a global keybinding, and I'll go with the default here: =C-x w= will run the news reader. We'll also have to configure where elfeed-org looks for configuration. I'd like this to be my =~/org/feeds.org= file.
+
+In order to synchronize Elfeed's database between computers, I would like it to be in a subdirectory of my =~/org= folder. Customizing =elfeed-db-directory= will accomplish that.
+
+We'll also install the [[https://github.com/algernon/elfeed-goodies][elfeed-goodies]] package which enhances Elfeed's user interface.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package elfeed
+    :bind (("C-x w" . 'elfeed))
+    :custom
+    (elfeed-db-directory "~/org/elfeed" "Move Elfeed's database."))
+
+  (use-package elfeed-goodies
+    :config
+    (elfeed-goodies/setup))
+
+  (use-package elfeed-org
+    :config
+    (elfeed-org)
+    :custom
+    (rmh-elfeed-org-files (list "~/org/feeds.org") "Set RSS feed file."))
+#+END_SRC
+
 * Version control
 Why talk to Git on the commandline when you can have [[https://magit.vc/][Magit]]? Magit is an excellent "porcelain" for Git inside Emacs. We'll install it and set up the [[https://magit.vc/manual/magit/Getting-Started.html#Getting-Started][recommended keybindings]].
 
