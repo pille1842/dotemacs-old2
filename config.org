@@ -325,14 +325,14 @@ In addition, I would like the following tracking behaviour for these keywords (s
 - TODO: No tracking when entering or leaving this state.
 - WAIT: Make a note when entering or leaving this state (the latter only if the new state doesn't produce a note).
 - DONE: Make a note when entering this state.
-- CANCELED: Record a timestamp when entering this state.
-- DELEGATED: Record a timestamp when entering this state.
+- CANCELED: Make a note when entering this state.
+- DELEGATED: Make a note when entering this state.
 
 Since these notes would be getting in the way of my, well, actual notes, I also want these state change notes to be logged into a drawer called LOGBOOK. Fortunately, customizing the variable =org-log-into-drawer= makes this very easy.
 
 #+BEGIN_SRC emacs-lisp
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "WAIT(w@/@)" "|" "DONE(d@)" "CANCELED(c@)" "DELEGATED(l!)")))
+        '((sequence "TODO(t)" "WAIT(w@/@)" "|" "DONE(d@)" "CANCELED(c@)" "DELEGATED(l@)")))
 
   (setq org-log-into-drawer t) ;; t is equal to logging into the LOGBOOK drawer.
 #+END_SRC
