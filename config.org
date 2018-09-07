@@ -311,6 +311,32 @@ The agenda draws items like tasks, events etc. from a list of Org files. In my c
   (setq org-agenda-files '("~/org"))
 #+END_SRC
 
+** "Todo" setup
+   I would like to have the following TODO keywords available in all Org files:
+
+- TODO: I have to do this.
+- WAIT: I still have to do this, but I'm currently waiting for some action by another entity.
+- DONE: I have done this.
+- CANCELED: I no longer plan to do this.
+- DELEGATED: I have given this task to another person and no longer need to do anything about it.
+
+In addition, I would like the following tracking behaviour for these keywords (see [[https://orgmode.org/manual/Tracking-TODO-state-changes.html#Tracking-TODO-state-changes][Tracking TODO state changes]]):
+
+- TODO: No tracking when entering or leaving this state.
+- WAIT: Make a note when entering or leaving this state (the latter only if the new state doesn't produce a note).
+- DONE: Make a note when entering this state.
+- CANCELED: Record a timestamp when entering this state.
+- DELEGATED: Record a timestamp when entering this state.
+
+Since these notes would be getting in the way of my, well, actual notes, I also want these state change notes to be logged into a drawer called LOGBOOK. Fortunately, customizing the variable =org-log-into-drawer= makes this very easy.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "WAIT(w@/@)" "|" "DONE(d@)" "CANCELED(c@)" "DELEGATED(l!)")))
+
+  (setq org-log-into-drawer t) ;; t is equal to logging into the LOGBOOK drawer.
+#+END_SRC
+
 ** Editing
 In Orgmode, I would like to enable visual-line-mode instead of filling paragraphs.
 
@@ -335,6 +361,19 @@ To export an Orgmode file to HTML, the htmlize package is required.
 
 #+BEGIN_SRC emacs-lisp
   (use-package htmlize)
+#+END_SRC
+
+** Capture templates
+The following templates allow me to capture entries to my diary, TODOs and appointments.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline "~/org/index.org" "Aufgaben")
+           "* TODO %?\n  %i\n  %a")
+          ("j" "Journal" entry (file+olp+datetree "~/org/index.org" "Tagebuch")
+           "* %?\nEingegeben am %U\n  %i\n  %a")
+          ("a" "Appointment" entry (file+headline "~/org/index.org" "Termine")
+           "* %U %?\n  %i\n  %a")))
 #+END_SRC
 
 * Version control
