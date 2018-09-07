@@ -255,6 +255,13 @@ Acoustic feedback is annoying, so let's disable it and give visual feedback inst
   (setq visible-bell t)
 #+END_SRC
 
+** Allow command lowercase-region
+By default, the function =lowercase-region= (=C-x C-l=) is disabled for safety purposes. I find this annoying.
+
+#+BEGIN_SRC emacs-lisp
+  (put 'downcase-region 'disabled nil)
+#+END_SRC
+
 * Editing
 The settings in this section improve the general experience when editing files.
 
