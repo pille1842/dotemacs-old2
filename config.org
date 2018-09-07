@@ -304,6 +304,12 @@ Since Orgmode is already installed, all we have to do is set up the [[https://or
   (global-set-key (kbd "C-c b") 'org-switchb)
 #+END_SRC
 
+By default, hitting RET within a link in an Org file will simply insert a newline at point (the normal function of RET). This is pretty useless: It would be better if Org followed the link when hitting RET. So let's configure that.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-return-follows-link t)
+#+END_SRC
+
 ** Personal files
 The agenda draws items like tasks, events etc. from a list of Org files. In my case, these reside in =~/org/= (which is actually symlinked into my ownCloud sync folder). Anything in there should be eligible for the agenda.
 
