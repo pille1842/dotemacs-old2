@@ -505,6 +505,13 @@ Install a mode to edit =.gitignore= files.
     :interpreter "lua5.3")
 #+END_SRC
 
+** Apache2 configuration files
+From time to time, I need to edit configuration files for apache2. This also includes =.htaccess= files.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package apache-mode)
+#+END_SRC
+
 * Tools
 The functions in this section are various enhancements of Emacs functionality.
 
