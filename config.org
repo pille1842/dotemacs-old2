@@ -382,11 +382,11 @@ The following templates allow me to capture entries to my diary, TODOs and appoi
 #+BEGIN_SRC emacs-lisp
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline "~/org/index.org" "Aufgaben")
-           "* TODO %?\n  %i\n  %a")
+           "* TODO %?\n%i\n\n%A")
           ("j" "Journal" entry (file+olp+datetree "~/org/index.org" "Tagebuch")
-           "* %?\nEingegeben am %U\n  %i\n  %a")
+           "* %?\n%i\n\nEingegeben %U")
           ("a" "Appointment" entry (file+headline "~/org/index.org" "Termine")
-           "* %U %?\n  %i\n  %a")))
+           "* %^T %?")))
 #+END_SRC
 
 * RSS reader
