@@ -262,6 +262,31 @@ By default, the function =lowercase-region= (=C-x C-l=) is disabled for safety p
   (put 'downcase-region 'disabled nil)
 #+END_SRC
 
+* Helm
+[[https://emacs-helm.github.io/helm/][Helm]] is an Emacs framework for incremental completions and narrowing selections. It helps to rapidly complete file names, buffer names, or any other Emacs interactions requiring selecting an item from a list of possible choices.
+
+The following configuration is recommended by the Helm developers. In particular, some built-in commands are replaced with their Helm counterparts to improve the editor's interface.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm
+    :diminish helm-mode
+    :config
+    (require 'helm-config)
+    (helm-mode 1)
+    (define-key global-map [remap find-file] 'helm-find-files)
+    (define-key global-map [remap occur] 'helm-occur)
+    (define-key global-map [remap list-buffers] 'helm-buffers-list)
+    (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
+    (define-key global-map [remap execute-extended-command] 'helm-M-x)
+    (unless (boundp 'completion-in-region-function)
+      (define-key lisp-interaction-mode-map
+        [remap completion-at-point]
+        'helm-lisp-completion-at-point)
+      (define-key emacs-lisp-mode-map
+        [remap completion-at-point]
+        'helm-lisp-completion-at-point)))
+#+END_SRC
+
 * Editing
 The settings in this section improve the general experience when editing files.
 
