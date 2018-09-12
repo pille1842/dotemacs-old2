@@ -545,3 +545,16 @@ This function from [[http://irreal.org/blog/?p=857][irreal.org]] reverts all unm
             (buffer-list))))
 #+END_SRC
 
+** Suppress annoying messages
+=sh-mode= obliterates the echo area and the Messages buffer with its annoying indentation setup messages. Until some sanity prevails in the minds of the developers of this mode, I'll advise my =message= function to ignore these three messages.
+
+#+BEGIN_SRC emacs-lisp
+    (defun eh/suppress-sh-mode-message (old-fun format &rest args)
+      (if (or (string= format "Indentation setup for shell type %s")
+              (string= format "Indentation variables are now local.")
+              (string= format "Setting up indent for shell type %s"))
+             (ignore)
+        (apply old-fun format args)))
+    (advice-add 'message :around #'eh/suppress-sh-mode-message)
+#+END_SRC
+
