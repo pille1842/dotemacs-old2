@@ -497,6 +497,12 @@ Install a mode to edit =.gitignore= files.
     :mode "\\.md\\'")
 #+END_SRC
 
+In Markdown mode, I want visual-line-mode enabled.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'markdown-mode-hook (lambda () (visual-line-mode 1)))
+#+END_SRC
+
 ** Lua
 [[https://www.lua.org/][Lua]] is a powerful, embeddable scripting language. [[https://github.com/immerrr/lua-mode][Lua-mode]] provides support for Lua in Emacs.
 
