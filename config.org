@@ -262,7 +262,7 @@ By default, the function =lowercase-region= (=C-x C-l=) is disabled for safety p
   (put 'downcase-region 'disabled nil)
 #+END_SRC
 
-* Helm
+* Helm and which-key
 [[https://emacs-helm.github.io/helm/][Helm]] is an Emacs framework for incremental completions and narrowing selections. It helps to rapidly complete file names, buffer names, or any other Emacs interactions requiring selecting an item from a list of possible choices.
 
 The following configuration is recommended by the Helm developers. In particular, some built-in commands are replaced with their Helm counterparts to improve the editor's interface.
@@ -285,6 +285,14 @@ The following configuration is recommended by the Helm developers. In particular
       (define-key emacs-lisp-mode-map
         [remap completion-at-point]
         'helm-lisp-completion-at-point)))
+#+END_SRC
+
+[[https://github.com/justbur/emacs-which-key][which-key]] is a global minor mode that displays a list of available keybindings when you type an incomplete command. For example, hitting =C-x= and waiting for a short moment will result in which-key displaying all available keybindings beginning with =C-x=. The mode greatly enhances Emacs' discoverability.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :config
+    (which-key-mode))
 #+END_SRC
 
 * Editing
