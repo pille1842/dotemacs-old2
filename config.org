@@ -422,6 +422,22 @@ The following templates allow me to capture entries to my diary, TODOs and appoi
            "* %^T %?")))
 #+END_SRC
 
+* Projectile
+[[https://github.com/bbatsov/projectile][Projectile]] is a project interaction library for Emacs. Its goal is to provide a nice set of features operating on a project level without introducing external dependencies (when feasible).
+
+Projectile's command dispatcher will be bound to =C-c p=.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :custom
+    (projectile-completion-system 'helm "Use helm as projectile's completion system.")
+    :bind
+    (:map projectile-mode-map
+          ("C-c p" . 'projectile-command-map))
+    :config
+    (projectile-mode +1))
+#+END_SRC
+
 * RSS reader
 Using [[https://github.com/skeeto/elfeed][Elfeed]], Emacs can be an excellent RSS news reader. [[https://github.com/remyhonig/elfeed-org][Elfeed-org]] enhances Elfeed by making it configurable in an Orgmode file.
 
