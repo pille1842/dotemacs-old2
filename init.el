@@ -47,7 +47,11 @@
 ;; buffer.
 (setq inhibit-startup-message t)
 (setq initial-scratch-message
-      ";; Welcome to Emacs.\n\n")
+      (concat ";; Welcome to Emacs "
+              emacs-version
+              " on "
+              system-name
+              ".\n\n"))
 
 ;; Set up package.el.
 (require 'package)
