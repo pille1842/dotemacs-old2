@@ -422,6 +422,18 @@ The following templates allow me to capture entries to my diary, TODOs and appoi
            "* %^T %?")))
 #+END_SRC
 
+** Rifle
+While searching Org files with =C-c a m= (tags and property matching in agenda files) provides an easy way to find a certain section in all of my Org files, this method relies on accurate tagging (and me remembering what system of tags I may have used years ago). In contrast, [[https://github.com/alphapapa/helm-org-rifle][helm-org-rifle]] searches through headlines, tags, properties, and even the contents of Org files, displaying the results in an easy-to-understand fashion.
+
+That should be reason enough to install it and set up an easy keybinding for it: =C-c r= and then either =r= (rifle on all buffers), =a= (rifle on all agenda files) or =c= (rifle on current buffer).
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-org-rifle
+    :bind (("C-c r r" . helm-org-rifle)
+           ("C-c r a" . helm-org-rifle-agenda-files)
+           ("C-c r c" . helm-org-rifle-current-buffer)))
+#+END_SRC
+
 * Projectile
 [[https://github.com/bbatsov/projectile][Projectile]] is a project interaction library for Emacs. Its goal is to provide a nice set of features operating on a project level without introducing external dependencies (when feasible).
 
