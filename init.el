@@ -76,6 +76,19 @@
 ;; Now load the actual configuration file.
 (org-babel-load-file (concat user-emacs-directory "config.org"))
 
+;; Some settings which are private in nature, such as those for email
+;; and IRC, can be kept in another file called private.el which is not
+;; under version control. Load this file if it exists.
+(defvar private-file
+  (concat user-emacs-directory "private.el")
+  "A file containing private settings. If it exists, it will be
+loaded at startup.
+
+The default location is ~/.emacs.d/private.el.")
+
+(when (file-exists-p private-file)
+  (load private-file))
+
 ;; Now decrease the garbage collection threshold to the original setting.
 (setq gc-cons-threshold eh/original-gc-cons-threshold)
 (makunbound 'eh/original-gc-cons-threshold)

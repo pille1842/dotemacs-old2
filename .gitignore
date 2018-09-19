@@ -57,3 +57,6 @@ flycheck_*.el
 
 # The custom-file
 /custom.el
+
+# The private file
+/private.el
