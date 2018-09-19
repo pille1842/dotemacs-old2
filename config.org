@@ -331,6 +331,15 @@ A matching parenthesis should always be highlighted to indicate where we are and
   (show-paren-mode 1)
 #+END_SRC
 
+* Remote connections
+I regularly need to work on remote machines via FTP. Emacs' built-in TRAMP works like a charm, but I do not want to remember all those pesky passwords. It turns out that someone else has solved that problem, and so you can store your passwords in an encrypted file called =~/.authinfo.gpg=.
+
+However, by default the FTP method (which relies on ange-ftp) only considers =~/.netrc=. [[https://www.reddit.com/r/emacs/comments/2umz5q/can_you_save_passwords_with_tramps_using_the_ftp/][This little Reddit thread]] pointed me to the variable =ange-ftp-netrc-filename= which can be used to circumvent this oversight. Sigh.
+
+#+BEGIN_SRC emacs-lisp
+  (setq ange-ftp-netrc-filename "~/.authinfo.gpg")
+#+END_SRC
+
 * Orgmode
 [[https://orgmode.org/][Orgmode]] is a beast of an extension to Emacs. It's a tool to make outlines, keep notes, maintain TODO lists, plan projects, and author documents. There is a near endless list of features and I cannot presume to know more than a tiny fraction of its abilities. The settings in this section customize Orgmode for my personal use.
 
