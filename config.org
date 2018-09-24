@@ -485,6 +485,7 @@ Projectile's command dispatcher will be bound to =C-c p=.
 
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
+    :diminish "P"
     :custom
     (projectile-completion-system 'helm "Use helm as projectile's completion system.")
     :bind
