@@ -609,6 +609,17 @@ We'll also install the [[https://github.com/algernon/elfeed-goodies][elfeed-good
     (rmh-elfeed-org-files (list "~/org/feeds.org") "Set RSS feed file."))
 #+END_SRC
 
+In Elfeed entries, I would like to always enable visual-line-mode since it provides a nicer reading experience.
+
+#+BEGIN_SRC emacs-lisp
+  (defun eh/setup-elfeed-entry-mode ()
+    "Enable visual-line-mode in Elfeed entries."
+    (interactive)
+    (visual-line-mode 1))
+
+  (add-hook 'elfeed-show-mode-hook 'eh/setup-elfeed-entry-mode)
+#+END_SRC
+
 * Version control
 Why talk to Git on the commandline when you can have [[https://magit.vc/][Magit]]? Magit is an excellent "porcelain" for Git inside Emacs. We'll install it and set up the [[https://magit.vc/manual/magit/Getting-Started.html#Getting-Started][recommended keybindings]].
 
